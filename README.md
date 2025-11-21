@@ -36,7 +36,7 @@ The primary goal is to handle disparate data formats (CSV for statistics, nested
 
 ---
 
-## 💾 Data Source and Schema Details
+## Data Source and Schema Details
 
 ### Data Source
 This Kaggle dataset contains statistics (CSV files) on daily popular YouTube videos over the course of many months. There are up to 200 trending videos published every day for many locations. The data for each region is in its own file. The video title, channel title, publication time, tags, views, likes and dislikes, description, and comment count are among the items included in the data. A category_id field, which differs by area, is also included in the JSON file linked to the region.
@@ -74,7 +74,7 @@ This semi-structured data is used as a lookup table and requires **flattening** 
 
 ---
 
-## 🗺️ Project Architecture and Data Flow
+## Project Architecture and Data Flow
 The architecture follows a serverless Data Lakehouse pattern, ensuring data is stored cost-effectively while remaining highly queryable.
 
 ### Data Flow Stages:
@@ -98,7 +98,7 @@ The architecture follows a serverless Data Lakehouse pattern, ensuring data is s
 
 ---
 
-## 🛠️ AWS Services and Rationale
+## AWS Services and Rationale
 The project maximizes the use of serverless, managed services to minimize operational overhead and ensure scalability.
 
 | Service | Category | Purpose in Project | Rationale |
