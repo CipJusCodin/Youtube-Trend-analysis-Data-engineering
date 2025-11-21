@@ -18,11 +18,11 @@ The data is sourced from the **Kaggle YouTube Trending Videos Dataset**, which c
 The pipeline processes two primary types of files:
 
 #### 1. Video Statistics Data (CSV Files)
-This raw data is separated by region (e.g., `USvideos.csv`, `CAvideos.csv`).
+This data contains the core metrics and video metadata, as shown in the provided spreadsheet image.
 
 | Column Name | Data Type | Description |
 | :--- | :--- | :--- |
-| `video_id` | String | Unique identifier for the YouTube video. **(Primary Key / Join Key)** |
+| `video_id` | String | Unique identifier for the YouTube video. |
 | `trending_date` | Date | Date the video was listed as trending. |
 | `title` | String | Video title. |
 | `channel_title` | String | Name of the publishing channel. |
@@ -34,15 +34,13 @@ This raw data is separated by region (e.g., `USvideos.csv`, `CAvideos.csv`).
 | `description` | String | Full video description. |
 
 #### 2. Category Reference Data (JSON Files)
-This semi-structured data is used as a lookup table and must be flattened during the transformation process.
+This semi-structured data is used as a lookup table and requires **flattening** to be usable.
 
-| Column Name | Raw JSON Structure | Description |
-| :--- | :--- | :--- |
-| `kind` | String | Resource type (e.g., "youtube#videoCategoryList"). |
-| `etag` | String | Entity tag for the resource. |
-| `items` | Array of Objects | **Nested data structure** containing the list of categories. |
-| `id` (Flattened) | BigInt | The category ID (e.g., `1`, `10`, `22`). |
-| `snippet.title` (Flattened) | String | The human-readable category name (e.g., "Film & Animation", "Music"). |
+| Column Name | Raw JSON Structure | **Transformation** | Description |
+| :--- | :--- | :--- | :--- |
+| **Root Payload** | `{ "items": [ ... ] }` | The **AWS Lambda** ETL must extract and iterate through the **nested `items` array**. | The array contains the full list of video categories. |
+| `id` | `items[*].id` | **Extracted Column** | The numerical category ID, used to join with the CSV data. |
+| `title` | `items[*].snippet.title` | **Extracted Column** | The human-readable category name (e.g., "Music," "Sports"). |
 
 ---
 
@@ -50,20 +48,15 @@ This semi-structured data is used as a lookup table and must be flattened during
 The architecture follows a serverless Data Lakehouse pattern, ensuring data is stored cost-effectively while remaining highly queryable.
 
 
-
-[Image of AWS Data Lake Architecture]
-
-
 ### Data Flow Stages:
 
 1.  **Ingestion (S3 Raw Layer):** Data is uploaded using the AWS CLI into the raw S3 bucket, partitioned by file type (CSV vs. JSON) and region.
 2.  **JSON Pre-Processing (Lambda ETL):**
     * **Automation:** An **S3 Put event trigger** invokes an **AWS Lambda** function whenever a new JSON file arrives.
-    * **Transformation:** The Lambda function (Python/Pandas/AWS Wrangler) reads the file, flattens the nested `items` array, applies necessary schema fixes (e.g., casting `id` to **BigInt**), and writes the output as **Parquet** to the Cleansed Layer.
+    * **Transformation:** The Lambda function (Python/Pandas/AWS Wrangler) reads the file, **flattens the nested `items` array**, applies necessary schema fixes (e.g., casting `id` to **BigInt**), and writes the output as **Parquet** to the Cleansed Layer.
 3.  **Structured Transformation (Glue ETL) with Optimization:**
     * An **AWS Glue ETL Job** is created and run using a PySpark script.
-    * **Crucial Optimization: The cleansed data is partitioned by `region` (`partition_keys=['region']`) when writing to S3.** This drastically reduces the data scanned by Athena, lowering query costs and latency.
-    * **Filtering:** A **predicate pushdown** is implemented to select only target regions (US, CA, GB) for initial pipeline stability.
+    * **Crucial Optimization:** The output data is explicitly **partitioned by `region` (`partition_keys=['region']`) when writing the Parquet files to S3.** This drastically reduces the data scanned by Athena, lowering query costs and latency.
     * **Conversion:** The job reads the raw CSVs, converts the data types, and writes the output as optimized **Parquet** to the Cleansed Layer.
 4.  **Analytical Layer (Glue Studio Job):**
     * A final **Glue Studio** visual job performs an **INNER JOIN** between the Cleansed CSV data and the Cleansed JSON category data on the `category_id` column.
