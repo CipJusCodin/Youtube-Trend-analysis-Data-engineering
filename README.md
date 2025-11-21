@@ -1,4 +1,4 @@
-# Serverless YouTube Trending Data Analytics Platform on AWS
+# YouTube Trending Data Analytics Platform on AWS
 
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
