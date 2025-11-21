@@ -4,6 +4,9 @@
 This project establishes a resilient, **end-to-end data pipeline** on **Amazon Web Services (AWS)** to ingest, clean, transform, and analyze a large dataset of trending YouTube videos. It models a modern data platform by building a **Medallion Architecture (Raw, Cleansed, Analytics)** on an S3-based Data Lake.
 
 The primary goal is to handle disparate data formats (CSV for statistics, nested JSON for metadata) and consolidate them into a fast, queryable **analytical layer** to derive insights, such as understanding the factors that drive video popularity across different global regions.
+
+---
+## Architecture Diagram
 ![architecture](https://github.com/user-attachments/assets/a61eda94-ecb3-45fc-a40e-ad5b8bd634e4)
 
 
@@ -11,7 +14,7 @@ The primary goal is to handle disparate data formats (CSV for statistics, nested
 
 ## 💾 Data Source and Schema Details
 ### Data Source
-The data is sourced from the **Kaggle YouTube Trending Videos Dataset**, which compiles daily statistics for trending videos across multiple international regions.
+This Kaggle dataset contains statistics (CSV files) on daily popular YouTube videos over the course of many months. There are up to 200 trending videos published every day for many locations. The data for each region is in its own file. The video title, channel title, publication time, tags, views, likes and dislikes, description, and comment count are among the items included in the data. A category_id field, which differs by area, is also included in the JSON file linked to the region.
 
 🔗 **Dataset Link:** [https://www.kaggle.com/datasets/datasnaek/youtube-new?resource=download](https://www.kaggle.com/datasets/datasnaek/youtube-new?resource=download)
 
@@ -66,6 +69,8 @@ The architecture follows a serverless Data Lakehouse pattern, ensuring data is s
 5.  **Reporting & Insights:**
     * **Amazon Athena** is used to query the final analytical table using standard SQL, leveraging the S3 partitioning for efficient data access.
     * **Amazon QuickSight** connects to Athena to visualize key performance indicators (KPIs) like total views, most popular categories, and regional trending patterns.
+
+<img width="1465" height="594" alt="DataFlow" src="https://github.com/user-attachments/assets/3f14e631-5069-4422-9c56-2cf0160daffb" />
 
 ---
 
