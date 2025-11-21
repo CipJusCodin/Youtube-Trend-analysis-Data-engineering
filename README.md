@@ -4,6 +4,8 @@
 This project establishes a resilient, **end-to-end data pipeline** on **Amazon Web Services (AWS)** to ingest, clean, transform, and analyze a large dataset of trending YouTube videos. It models a modern data platform by building a **Medallion Architecture (Raw, Cleansed, Analytics)** on an S3-based Data Lake.
 
 The primary goal is to handle disparate data formats (CSV for statistics, nested JSON for metadata) and consolidate them into a fast, queryable **analytical layer** to derive insights, such as understanding the factors that drive video popularity across different global regions.
+![architecture](https://github.com/user-attachments/assets/a61eda94-ecb3-45fc-a40e-ad5b8bd634e4)
+
 
 ---
 
