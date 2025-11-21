@@ -1,18 +1,43 @@
 # 🚀 Serverless YouTube Trending Data Analytics Platform on AWS
 
+[![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
+[![AWS Lambda](https://img.shields.io/badge/AWS%20Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)](https://aws.amazon.com/lambda/)
+[![AWS Glue](https://img.shields.io/badge/AWS%20Glue-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/glue/)
+[![Amazon S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/)
+[![Amazon Athena](https://img.shields.io/badge/Amazon%20Athena-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/athena/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+---
+
+## 📋 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Architecture Diagram](#architecture-diagram)
+- [Data Source and Schema Details](#-data-source-and-schema-details)
+  - [Data Source](#data-source)
+  - [Raw Dataset Schema](#raw-dataset-schema)
+- [Project Architecture and Data Flow](#-project-architecture-and-data-flow)
+  - [Data Flow Stages](#data-flow-stages)
+- [AWS Services and Rationale](#-aws-services-and-rationale)
+
+---
+
 ## Project Overview
 This project establishes a resilient, **end-to-end data pipeline** on **Amazon Web Services (AWS)** to ingest, clean, transform, and analyze a large dataset of trending YouTube videos. It models a modern data platform by building a **Medallion Architecture (Raw, Cleansed, Analytics)** on an S3-based Data Lake.
 
 The primary goal is to handle disparate data formats (CSV for statistics, nested JSON for metadata) and consolidate them into a fast, queryable **analytical layer** to derive insights, such as understanding the factors that drive video popularity across different global regions.
 
 ---
+
 ## Architecture Diagram
 ![architecture](https://github.com/user-attachments/assets/a61eda94-ecb3-45fc-a40e-ad5b8bd634e4)
-
 
 ---
 
 ## 💾 Data Source and Schema Details
+
 ### Data Source
 This Kaggle dataset contains statistics (CSV files) on daily popular YouTube videos over the course of many months. There are up to 200 trending videos published every day for many locations. The data for each region is in its own file. The video title, channel title, publication time, tags, views, likes and dislikes, description, and comment count are among the items included in the data. A category_id field, which differs by area, is also included in the JSON file linked to the region.
 
@@ -51,7 +76,6 @@ This semi-structured data is used as a lookup table and requires **flattening** 
 
 ## 🗺️ Project Architecture and Data Flow
 The architecture follows a serverless Data Lakehouse pattern, ensuring data is stored cost-effectively while remaining highly queryable.
-
 
 ### Data Flow Stages:
 
